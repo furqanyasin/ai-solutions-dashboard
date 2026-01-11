@@ -1,33 +1,13 @@
-/* Reset and base styles */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Custom utilities for the dashboard */
-.radius-8 {
-  border-radius: 8px !important;
-}
-
-.radius-12 {
-  border-radius: 12px !important;
-}
+/* Custom utilities that extend the WowDash system */
 
 .radius-16 {
   border-radius: 16px !important;
 }
 
-/* Animation classes */
+.bg-gradient-primary-600 {
+  background: linear-gradient(135deg, #487fff 0%, #486cea 100%) !important;
+}
+
 .animate__animated {
   animation-duration: 0.5s;
 }
@@ -48,116 +28,22 @@ body {
   }
 }
 
-/* Gradient backgrounds */
-.bg-gradient-primary-600 {
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #818cf8 100%) !important;
-}
-
-/* Link styles */
-a {
-  text-decoration: none;
-}
-
-/* Hover effects */
-.hover-border-primary-600:hover {
-  border-color: #4f46e5 !important;
-}
-
 .transition-all {
   transition: all 0.3s ease;
 }
 
-/* Dark mode overrides */
-.dark body {
-  background-color: #0f172a;
-  color: #f1f5f9;
+/* Ensure the root element takes full height */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.dark .card {
-  background-color: #1e293b !important;
-  color: #f1f5f9 !important;
+/* Dark mode specific adjustments if needed by the user */
+[data-theme="dark"] .bg-white {
+  background-color: var(--dark-2) !important;
 }
 
-.dark .text-secondary-light {
-  color: #94a3b8 !important;
-}
-
-.dark .bg-neutral-50 {
-  background-color: #334155 !important;
-}
-
-.dark .bg-neutral-100 {
-  background-color: #1e293b !important;
-}
-
-.dark .bg-neutral-200 {
-  background-color: #475569 !important;
-}
-
-.dark .border {
-  border-color: #334155 !important;
-}
-
-.dark .border-dashed {
-  border-color: #475569 !important;
-}
-
-.dark .form-control,
-.dark .form-select {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
-  color: #f1f5f9 !important;
-}
-
-.dark .form-group label {
-  color: #94a3b8 !important;
-}
-
-.dark .dropdown-menu {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
-}
-
-.dark .dropdown-item {
-  color: #f1f5f9 !important;
-}
-
-.dark .navbar-header {
-  background-color: #1e293b !important;
-  border-bottom-color: #334155 !important;
-}
-
-.dark .navbar-search input {
-  background-color: #0f172a !important;
-  border-color: #334155 !important;
-  color: #f1f5f9 !important;
-}
-
-.dark .d-footer {
-  background-color: #1e293b !important;
-  border-top-color: #334155 !important;
-}
-
-.dark .sidebar {
-  background-color: #1e293b !important;
-  border-right-color: #334155 !important;
-}
-
-.dark .sidebar-menu li a {
-  color: #94a3b8 !important;
-}
-
-.dark .sidebar-menu li a:hover,
-.dark .sidebar-menu li a.active-page {
-  background-color: #0f172a !important;
-  color: #6366f1 !important;
-}
-
-.dark .sidebar-menu-group-title {
-  color: #475569 !important;
-}
-
-.dark .sidebar-submenu {
-  background-color: #0f172a !important;
+[data-theme="dark"] .text-black {
+  color: var(--base) !important;
 }
