@@ -5,6 +5,11 @@ interface UserProfile {
     role: string;
     email: string;
     avatar: string;
+    phone: string;
+    department: string;
+    designation: string;
+    language: string;
+    bio: string;
 }
 
 interface AuthContextType {
@@ -22,7 +27,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             name: 'Furqan Yasin',
             role: 'Project Owner',
             email: 'furqan@example.com',
-            avatar: '/assets/images/user.png'
+            avatar: '/assets/images/user.png',
+            phone: '(1) 2536 2561 2365',
+            department: 'Development',
+            designation: 'Front End Developer',
+            language: 'English',
+            bio: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
         };
     });
 

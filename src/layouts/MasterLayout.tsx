@@ -356,7 +356,7 @@ const MasterLayout: React.FC<MasterLayoutProps> = ({ children }) => {
                                             <li>
                                                 <Link
                                                     className="dropdown-item text-black dark:text-white px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                                                    to="/settings"
+                                                    to="/view-profile"
                                                     onClick={() => setActiveDropdown(null)}
                                                 >
                                                     <Icon icon="solar:user-linear" className="icon text-xl" />
