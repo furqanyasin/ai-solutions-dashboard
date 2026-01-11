@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { useTheme } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/AuthContext";
 
 interface MasterLayoutProps {
     children: React.ReactNode;
 }
 
 const MasterLayout: React.FC<MasterLayoutProps> = ({ children }) => {
+    const { theme, toggleTheme } = useTheme();
+    const { user } = useAuth();
     const [sidebarActive, setSidebarActive] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const location = useLocation();
 
     useEffect(() => {
@@ -305,50 +310,54 @@ const MasterLayout: React.FC<MasterLayoutProps> = ({ children }) => {
                                 {/* Theme Toggle */}
                                 <button
                                     type="button"
-                                    data-theme-toggle
-                                    className="w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center"
-                                    onClick={() => {
-                                        document.documentElement.classList.toggle("dark");
-                                    }}
+                                    className="w-40-px h-40-px bg-neutral-200 dark:bg-neutral-700 rounded-circle d-flex justify-content-center align-items-center"
+                                    onClick={toggleTheme}
+                                    title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                                 >
                                     <Icon
-                                        icon="mdi:theme-light-dark"
+                                        icon={theme === 'light' ? "solar:moon-outline" : "solar:sun-2-outline"}
                                         className="text-primary-light text-xl"
                                     />
                                 </button>
 
                                 {/* User Profile */}
-                                <div className="dropdown">
+                                <div className={`dropdown ${activeDropdown === 'profile' ? 'open' : ''}`}>
                                     <button
-                                        className="d-flex justify-content-center align-items-center rounded-circle"
+                                        className="d-flex justify-content-center align-items-center rounded-circle border-0 bg-transparent"
                                         type="button"
-                                        data-bs-toggle="dropdown"
+                                        onClick={() => setActiveDropdown(activeDropdown === 'profile' ? null : 'profile')}
                                     >
                                         <img
-                                            src="/assets/images/user.png"
+                                            src={user.avatar}
                                             alt="user"
-                                            className="w-40-px h-40-px object-fit-cover rounded-circle"
+                                            className="w-40-px h-40-px object-fit-cover rounded-circle border border-primary-600"
                                         />
                                     </button>
-                                    <div className="dropdown-menu to-top dropdown-menu-sm">
-                                        <div className="py-12 px-16 radius-8 bg-primary-50 mb-16 d-flex align-items-center justify-content-between gap-2">
+                                    <div className={`dropdown-menu to-top dropdown-menu-sm ${activeDropdown === 'profile' ? 'show' : ''}`}
+                                        style={{ display: activeDropdown === 'profile' ? 'block' : 'none', right: 0, left: 'auto' }}>
+                                        <div className="py-12 px-16 radius-8 bg-primary-50 dark:bg-primary-900/20 mb-16 d-flex align-items-center justify-content-between gap-2">
                                             <div>
                                                 <h6 className="text-lg text-primary-light fw-semibold mb-2">
-                                                    Admin User
+                                                    {user.name}
                                                 </h6>
                                                 <span className="text-secondary-light fw-medium text-sm">
-                                                    Administrator
+                                                    {user.role}
                                                 </span>
                                             </div>
-                                            <button type="button" className="hover-text-danger">
+                                            <button
+                                                type="button"
+                                                className="hover-text-danger border-0 bg-transparent"
+                                                onClick={() => setActiveDropdown(null)}
+                                            >
                                                 <Icon icon="radix-icons:cross-1" className="icon text-xl" />
                                             </button>
                                         </div>
-                                        <ul className="to-top-list">
+                                        <ul className="to-top-list p-0 m-0 list-unstyled">
                                             <li>
                                                 <Link
-                                                    className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                                    className="dropdown-item text-black dark:text-white px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                                     to="/settings"
+                                                    onClick={() => setActiveDropdown(null)}
                                                 >
                                                     <Icon icon="solar:user-linear" className="icon text-xl" />
                                                     My Profile
@@ -356,14 +365,28 @@ const MasterLayout: React.FC<MasterLayoutProps> = ({ children }) => {
                                             </li>
                                             <li>
                                                 <Link
-                                                    className="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                                    className="dropdown-item text-black dark:text-white px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                                     to="/settings"
+                                                    onClick={() => setActiveDropdown(null)}
                                                 >
                                                     <Icon
                                                         icon="icon-park-outline:setting-two"
                                                         className="icon text-xl"
                                                     />
                                                     Settings
+                                                </Link>
+                                            </li>
+                                            <li className="pt-8 mt-8 border-top">
+                                                <Link
+                                                    className="dropdown-item text-danger px-0 py-8 hover-bg-transparent d-flex align-items-center gap-3"
+                                                    to="#"
+                                                    onClick={() => {
+                                                        setActiveDropdown(null);
+                                                        alert("Sign out clicked (Demo Only)");
+                                                    }}
+                                                >
+                                                    <Icon icon="solar:logout-3-outline" className="icon text-xl" />
+                                                    Log Out
                                                 </Link>
                                             </li>
                                         </ul>
