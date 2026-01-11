@@ -1,0 +1,68 @@
+/* Reset and base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom utilities for the dashboard */
+.radius-8 {
+  border-radius: 8px !important;
+}
+
+.radius-12 {
+  border-radius: 12px !important;
+}
+
+.radius-16 {
+  border-radius: 16px !important;
+}
+
+/* Animation classes */
+.animate__animated {
+  animation-duration: 0.5s;
+}
+
+.animate__fadeInUp {
+  animation-name: fadeInUp;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Gradient backgrounds */
+.bg-gradient-primary-600 {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #818cf8 100%) !important;
+}
+
+/* Link styles */
+a {
+  text-decoration: none;
+}
+
+/* Hover effects */
+.hover-border-primary-600:hover {
+  border-color: #4f46e5 !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
