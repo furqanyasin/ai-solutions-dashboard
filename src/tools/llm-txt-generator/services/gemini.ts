@@ -252,8 +252,8 @@ export const generateLLMsTxt = async (
 
         const ai = new GoogleGenAI({ apiKey });
 
-        // Using gemini-1.5-flash for better compatibility and speed
-        const model = "gemini-1.5-flash";
+        // Using gemini-2.5-flash for better compatibility and speed
+        const model = "gemini-2.5-flash";
 
         const prompt = `
       ====================================
@@ -296,39 +296,47 @@ export const generateLLMsTxt = async (
       Generate the JSON response now.
     `;
 
+        // Use JSON mode for structured output without tools
         const response = await ai.models.generateContent({
             model: model,
             contents: prompt,
             config: {
                 systemInstruction: SYSTEM_PROMPT,
-                tools: [{ googleSearch: {} }],
                 responseMimeType: "application/json",
-                responseSchema: RESPONSE_SCHEMA,
-                thinkingConfig: { thinkingBudget: 2048 }
+                responseSchema: RESPONSE_SCHEMA
             }
         });
 
+        console.log("Full Response:", JSON.stringify(response, null, 2));
+
+        // Check if response has candidates
+        if (!response.candidates || response.candidates.length === 0) {
+            console.error("No candidates in response");
+            throw new Error("No response candidates from Gemini. The model may have blocked the request.");
+        }
+
+        const candidate = response.candidates[0];
+        console.log("Candidate:", JSON.stringify(candidate, null, 2));
+
+        // Check finish reason
+        if (candidate.finishReason && candidate.finishReason !== 'STOP') {
+            console.error("Unusual finish reason:", candidate.finishReason);
+            throw new Error(`Generation stopped with reason: ${candidate.finishReason}`);
+        }
+
         const resultText = response.text;
+        console.log("Result Text Length:", resultText?.length);
+
         if (!resultText) {
-            throw new Error("Empty response from Gemini.");
+            throw new Error("Empty response from Gemini. Check console logs for details.");
         }
 
+        // Parse the JSON response (should be clean JSON from responseMimeType)
         const data = JSON.parse(resultText) as GenerationResult;
-
-        // Extract grounding URLs
-        const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-        const urls: string[] = [];
-        if (groundingChunks) {
-            groundingChunks.forEach(chunk => {
-                if (chunk.web?.uri) {
-                    urls.push(chunk.web.uri);
-                }
-            });
-        }
 
         return {
             ...data,
-            groundingUrls: urls
+            groundingUrls: [] // No grounding URLs when not using search tools
         };
 
     } catch (error: any) {
