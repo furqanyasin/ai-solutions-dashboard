@@ -303,7 +303,8 @@ export const generateLLMsTxt = async (
             config: {
                 systemInstruction: SYSTEM_PROMPT,
                 responseMimeType: "application/json",
-                responseSchema: RESPONSE_SCHEMA
+                responseSchema: RESPONSE_SCHEMA,
+                maxOutputTokens: 65536 // Increased token limit for large files
             }
         });
 
@@ -320,8 +321,13 @@ export const generateLLMsTxt = async (
 
         // Check finish reason
         if (candidate.finishReason && candidate.finishReason !== 'STOP') {
-            console.error("Unusual finish reason:", candidate.finishReason);
-            throw new Error(`Generation stopped with reason: ${candidate.finishReason}`);
+            if (candidate.finishReason === 'MAX_TOKENS') {
+                console.warn("Generation hit token limit. Response may be incomplete.");
+                // We proceed anyway to see if we can salvage partial JSON
+            } else {
+                console.error("Unusual finish reason:", candidate.finishReason);
+                throw new Error(`Generation stopped with reason: ${candidate.finishReason}`);
+            }
         }
 
         const resultText = response.text;
